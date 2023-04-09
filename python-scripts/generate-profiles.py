@@ -17,26 +17,12 @@ seq = [i/10 for i in range(8,18)]
 
 # Creating a list of bios
 biolist = []
+bios=open("bios.txt","r")
+# Gathering bios 
+for _ in tqdm(range(100)):
+    
+    biolist.append(bios.readline()[:-1])
 
-# Gathering bios by looping and refreshing the web page
-for _ in tqdm(range(2)):
-    
-    # Refreshing the page
-    page = requests.get("https://socialprofiletools.com/bio-random")
-    soup = bs(page.content)
-    
-    try:
-        # Getting the bios
-        bios = soup.find('div', class_='row no-margin for-sign').find_all('p')
-
-        # Adding to a list of the bios
-        biolist.extend([re.findall('"([^"]*)"', i.text) for i in bios])
-    except:
-        pass
-    
-    # Sleeping 
-    time.sleep(random.choice(seq))
-    
 # Creating a DF from the bio list
 bio_df = pd.DataFrame(biolist, columns=['Bios'])
 print(bio_df)
